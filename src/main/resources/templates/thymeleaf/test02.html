@@ -38,17 +38,18 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>유재석</td>
-					<td>010-0000-1111</td>
-					<td class="text-danger">VIP</td>
-					<td class="text-primary">10293P</td>
-				</tr>
-				<tr>
-					<td>지드레곤</td>
-					<td>010-9999-6666</td>
-					<td class="text-warning">GOLD</td>
-					<td>2500P</td>
+				<tr th:each="member:${memberList}">
+					<td th:text="${member.name}">유재석</td>
+					<td th:text="${member.phoneNumber}">010-0000-1111</td>
+					<td th:switch="${member.grade}">
+						<span class="text-danger" th:case="VIP">VIP</span>
+						<span class="text-warning" th:case="GOLD">GOLD</span>
+						<span th:case="*" th:text="${member.grade}">BASIC</span>
+					</td>
+					<td>
+						<span class="text-primary" th:if="${member.point >= 5000}" th:text="|${member.point}P|">10293P</span>
+						<span th:unless="${member.point >= 5000}" th:text="|${member.point}P|">403P</span>
+					</td>
 				</tr>
 			</tbody>
 		</table>
