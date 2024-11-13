@@ -1,1 +1,20 @@
 @charset "UTF-8";
+
+#wrap {
+	width:1200px;
+}
+
+.main-contents > .main-menu {
+	width:200px;
+	background-color:cornflowerblue;
+}
+
+.main-contents > .contents {
+	width:1000px;
+}
+
+.input-label {
+	width:120px;
+	text-align:right;
+	margin-right:10px;
+}
