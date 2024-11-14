@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
 <title>날씨 기록</title>
@@ -36,21 +36,18 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>2024년 11월 10일</td>
-							<td><img src="http://marondal.com/material/images/dulumary/web/jstl/sunny.jpg"></td>
-							<td>35.8°C</td>
-							<td>0.0mm</td>
-							<td>보통</td>
-							<td>3.2km/h</td>
-						</tr>
-						<tr>
-							<td>2024년 11월 12일</td>
-							<td><img src="http://marondal.com/material/images/dulumary/web/jstl/rainy.jpg"></td>
-							<td>24.8°C</td>
-							<td>10.5mm</td>
-							<td>좋음</td>
-							<td>1.2km/h</td>
+						<tr th:each="weather:${weatherList}">
+							<td th:text="${#temporals.format(weather.date, 'yyyy년 M월 d일')}">2024년 11월 10일</td>
+							<td th:switch="${weather.weather}">
+								<img th:case="맑음" src="http://marondal.com/material/images/dulumary/web/jstl/sunny.jpg">
+								<img th:case="구름조금" src="http://marondal.com/material/images/dulumary/web/jstl/partlyCloudy.jpg">
+								<img th:case="흐림" src="http://marondal.com/material/images/dulumary/web/jstl/cloudy.jpg">
+								<img th:case="비" src="http://marondal.com/material/images/dulumary/web/jstl/rainy.jpg">	
+							</td>
+							<td th:text="|${weather.temperatures}°C|">35.8°C</td>
+							<td th:text="|${weather.precipitation}mm|">0.0mm</td>
+							<td th:text="${weather.microDust}">보통</td>
+							<td th:text="|${weather.windSpeed}km/h|">3.2km/h</td>
 						</tr>
 					</tbody>
 				</table>
