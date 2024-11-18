@@ -12,14 +12,75 @@
 		<h2>즐겨찾기 추가</h2>
 		
 		<label>제목</label>
-		<input type="text" class="form-control">
+		<input type="text" class="form-control" id="nameInput">
 		<label>주소</label>
-		<input type="text" class="form-control">
-		<button type="button" class="btn btn-success btn-block mt-3">추가</button>
+		<input type="text" class="form-control" id="urlInput">
+		<button type="button" class="btn btn-success btn-block mt-3" id="addBtn">추가</button>
 	</div>
 
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+
+
+<script>
+	$(document).ready(function() {
+		
+		$("#addBtn").on("click", function() {
+			
+			let name = $("#nameInput").val();
+			let url = $("#urlInput").val();
+			
+			if(name == "") {
+				alert("이름을 입력하세요!");
+				return ;
+			}
+			
+			if(url == "") {
+				alert("주소를 입력하세요");
+				return ;
+			}
+			
+			// 주소 가 http:// 또는 https:// 로 시작하는지 유효성 검사를 수행하세요.
+			// if(!(url.startsWith("http://") || url.startsWith("https://"))) {
+			if(!url.startsWith("http://") && !url.startsWith("https://")) {
+				alert("정상적이지 않은 주소 입니다.");
+				return ;
+			}
+			
+			
+			// name과 url을 즐겨찾기에 저장한다.
+			// /ajax/favorite/create url path로 post메소드 를 통해
+			// name이라는 이름으로 사이트 이름, url이라는 이름으로 주소를 전달하면, 
+			// 저장을 해주고, 그 결과를 성공 실패 여부에 따라 아래 json형태로 보내준다.  		
+			// 성공 : {"result":"success"} 실패 : {"result":"fail"}
+			$.ajax({
+				type:"post"
+				, url:"/ajax/favorite/create"
+				, data:{"name":name, "url":url}
+				, success:function(response) {
+					if(response.result == "success") {
+						// list 페이지로 이동 
+						location.href = "/ajax/favorite/list";
+					} else {
+						alert("저장 실패");
+					}
+				}
+				, error:function() {
+					alert("저장 에러!");
+				}
+			});
+			
+			
+			
+			
+		});
+		
+	});
+
+</script>
+
+
+
 </body>
 </html>
