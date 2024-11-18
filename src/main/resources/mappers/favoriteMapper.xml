@@ -33,5 +33,15 @@
 		)
 	</insert>
 	
+	<select id="countByUrl" parameterType="string" resultType="int">
+		SELECT 
+			count(*)
+		FROM 
+			`favorite`
+		WHERE 
+			`url` = #{url}
+	
+	</select>
+	
 
 </mapper>

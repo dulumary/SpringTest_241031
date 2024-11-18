@@ -14,7 +14,12 @@
 		<label>제목</label>
 		<input type="text" class="form-control" id="nameInput">
 		<label>주소</label>
-		<input type="text" class="form-control" id="urlInput">
+		<div class="d-flex">
+			<input type="text" class="form-control" id="urlInput">
+			<button type="button" class="btn btn-success col-2 ml-3" id="duplicateBtn">중복확인</button>
+		</div>
+		<div class="text-danger small d-none" id="duplicateText">중복된 url입니다.</div>
+		<div class="text-success small d-none" id="availableText">사용가능한 url 입니다.</div>
 		<button type="button" class="btn btn-success btn-block mt-3" id="addBtn">추가</button>
 	</div>
 
@@ -25,6 +30,50 @@
 
 <script>
 	$(document).ready(function() {
+		
+		$("#duplicateBtn").on("click", function() {
+			let url = $("#urlInput").val();
+		
+			if(url == "") {
+				alert("주소를 입력하세요");
+				return ;
+			}
+			
+			// 주소 가 http:// 또는 https:// 로 시작하는지 유효성 검사를 수행하세요.
+			// if(!(url.startsWith("http://") || url.startsWith("https://"))) {
+			if(!url.startsWith("http://") && !url.startsWith("https://")) {
+				alert("정상적이지 않은 주소 입니다.");
+				return ;
+			}
+			
+			$.ajax({
+				type:"post"
+				, url:"/ajax/favorite/duplicate-url"
+				, data:{"url":url}
+				, success:function(response) {
+					// 중복됨  {"isDuplicate":true}
+					// 중복안됨  {"isDuplicate":false}
+					if(response.isDuplicate) {
+						// 중복
+						$("#duplicateText").removeClass("d-none");
+						$("#availableText").addClass("d-none");
+					} else {
+							
+						$("#availableText").removeClass("d-none");
+						$("#duplicateText").addClass("d-none");
+						
+					}
+					
+				
+				}
+				, error:function() {
+					alert("중복확인 에러!");
+				}
+			});
+			
+				
+		});
+			
 		
 		$("#addBtn").on("click", function() {
 			

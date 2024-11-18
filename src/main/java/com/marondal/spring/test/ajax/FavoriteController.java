@@ -65,5 +65,33 @@ public class FavoriteController {
 		return "ajax/favorite/input";
 		
 	}
+	
+	// API
+	@ResponseBody
+	@PostMapping("/duplicate-url")
+	public Map<String, Boolean>  isDuplicateUrl(@RequestParam("url") String url) {
+		
+		boolean isDuplicate = favoriteService.isDuplicateUrl(url);
+		
+		// 중복됨  {"isDuplicate":true}
+		// 중복안됨  {"isDuplicate":false}
+		Map<String, Boolean> resultMap = new HashMap<>();
+
+		resultMap.put("isDuplicate", isDuplicate);
+//		if(isDuplicate) {
+//			resultMap.put("isDuplicate", true);
+//		} else {
+//			resultMap.put("isDuplicate", false);
+//		}
+		
+		return resultMap;
+		
+	}
+	
+	
+	
+	
+	
+	
 
 }
