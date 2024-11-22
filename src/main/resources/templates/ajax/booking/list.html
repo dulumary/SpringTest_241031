@@ -42,11 +42,17 @@
 	             	<tbody>
 	             		<tr th:each="booking:${bookingList}">
 	             			<td th:text="${booking.name}">김인규</td>
-	             			<td th:text="${booking.date}">2024년 11월 19일</td>
+	             			<td th:text="${#temporals.format(booking.date, 'yyyy년 M월 d일')}">2024년 11월 19일</td>
 	             			<td th:text="${booking.day}">2</td>
 	             			<td th:text="${booking.headcount}">4</td>
 	             			<td th:text="${booking.phoneNumber}">010-1234-5678</td>
-	             			<td th:text="${booking.state}" class="text-info">대기중</td>
+	             			<td th:switch="${booking.state}">
+	             				<span th:case="대기중" class="text-info">대기중</span>
+	             				<span th:case="확정" class="text-success">확정</span>
+	             				<span th:case="취소" class="text-danger">취소</span>
+	             				<span th:case="*" th:text="${booking.state}">상태</span>
+	             			</td>
+	             			<td><button type="button" class="btn btn-danger btn-sm delete-btn" th:data-booking-id="${booking.id}">삭제</button></td>
 	             		</tr>
 	             	
 	             	</tbody>
@@ -75,6 +81,28 @@
     <script>
         $(document).ready(function() {
 
+        	$(".delete-btn").on("click", function() {
+        		
+        		let id = $(this).data("booking-id");
+        		
+        		$.ajax({
+        			type:"get"
+        			, url:"/ajax/booking/delete"
+        			, data:{"id":id}
+        			, success:function(response) {
+        				
+        				if(response.result == "success") {
+        					location.reload();
+        				} else {
+        					alert("삭제 실패");
+        				}
+        			}
+        			, error:function() {
+        				alert("삭제 에러!");
+        			}
+        		});
+        		
+        	});
         } );
     </script>
     </body>

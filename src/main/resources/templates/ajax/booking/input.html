@@ -65,7 +65,78 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         $(document).ready(function() {
+        	
+        	$("#dateInput").datepicker({
+        		dateFormat:"yy년 m월 d일"
+        	});
 
+        	$("#bookingBtn").on("click", function() {
+        		let name = $("#nameInput").val();
+        		let date = $("#dateInput").val();
+        		let day = $("#dayInput").val();
+        		let headcount = $("#headcountInput").val();
+        		let phoneNumber = $("#phoneNumberInput").val();
+        		
+        		if(name == "") {
+        			alert("이름을 입력하세요");
+        			return ;
+        		}
+        		
+        		if(date == "") {
+        			alert("날짜를 입력하세요");
+        			return ;
+        		}
+        		
+        		if(day == "") {
+        			alert("일수를 입력하세요");
+        			return ;
+        		}
+        		
+        		// day가 숫자가 아닌경우
+        		// Not a Number
+        		if(isNaN(day)) {
+        			alert("일수는 숫자만 입력 가능합니다.");
+        			return ;
+        		}
+        		
+        		if(headcount == "") {
+        			alert("인원을 입력하세요");
+        			return ;
+        		}
+        		
+        		if(isNaN(headcount)) {
+        			alert("인원은 숫자만 입력 가능합니다.");
+        			return ;
+        		}
+        		
+        		if(phoneNumber == "") {
+        			alert("전화번호를 입력하세요");
+        			return ;
+        		}
+        		
+        		$.ajax({
+        			type:"get"
+        			, url:"/ajax/booking/create"
+        			, data:{"name":name, "date":date, "day":day, "headcount":headcount, "phoneNumber":phoneNumber}
+        			, success:function(response) {
+        				// 성공 : {"result":"success"}
+        				// 실패 : {"result":"fail"}
+        			
+        				if(response.result == "success") {
+        					location.href = "/ajax/booking/list";
+        				} else {
+        					alert("예약 실패!!");
+        				}
+        			
+        			}
+        			, error:function() {
+        				alert("예약 에러!");
+        			}
+        		});
+        		
+        		
+        	});
+        	
         } );
     </script>
     </body>

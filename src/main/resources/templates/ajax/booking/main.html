@@ -38,11 +38,11 @@
                         <div class="no-member-input mt-3" id="nonMember">
                             <div class="input-gorup form-inline">
                                 <label class="input-label">이름 </label>
-                                <input type="text" class="form-control text-input" id="name">
+                                <input type="text" class="form-control text-input" id="nameInput">
                             </div>
                             <div class="input-gorup form-inline mt-3">
                                 <label class="input-label">전화번호 </label>
-                                <input type="text" class="form-control text-input" id="phoneNumber">
+                                <input type="text" class="form-control text-input" id="phoneNumberInput">
                             </div>
                          
                         </div>
@@ -79,8 +79,52 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         $(document).ready(function() {
-
+		
+        	$("#lookupBtn").on("click", function() {
+        		
+        		let name = $("#nameInput").val();
+        		let phoneNumber = $("#phoneNumberInput").val();
+        		
+        		if(name == "") {
+        			alert("이름을 입력하세요");
+        			return ;
+        		} 
+        		
+        		if(phoneNumber == "") {
+        			alert("전화번호를 입력하세요");
+        			return ;
+        		}
+        		
+        		$.ajax({
+        			type:"get"
+        			, url:"/ajax/booking/info"
+        			, data:{"name":name, "phoneNumber":phoneNumber}
+        			, success:function(response) {
+        				// 조회 성공 : {"result":"success", "item":{"name":"김인규", "day":1, "headcount":2, ........}}
+        				// 조회 실패 : {"result":"fail"}
+        				if(response.result == "success") {
+//        					{"id":2,"name":"김종국","headcount":4,"day":1,"date":"2025-08-04","phoneNumber":"010-1212-2121","state":"확정","createdAt":"2024-11-13T17:04:26","updatedAt":"2024-11-13T17:04:26"}
+            				alert("이름 : " + response.item.name + "\n날짜 : " + response.item.date
+            						+ "\n일수 : " + response.item.day + "\n인원 : " + response.item.headcount 
+            						+ "\n전화번호 : " + response.item.phoneNumber);
+        				} else {
+        					alert("존재하지 않는 정보입니다.");
+        				}
+        				
+        			}
+        			, error:function() {
+        				alert("조회 에러");
+        			}
+        		});
+        	});
+        	
         } );
+        
+        
+        
+        
+        
+        
     </script>
     </body>
 </html>
